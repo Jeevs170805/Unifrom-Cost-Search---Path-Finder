@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Smart Drone Delivery (UCS)</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Smart Drone Delivery (Uniform Cost Search)</h1>
+  <br>
+  <p>Warehouse (Start) = green • Customer (Goal) = blue • No-fly zones = red</p>
+
+  <!-- Grid rendered server-side as DOM elements (no inline JS with Jinja) -->
+  <div id="grid" data-rows="{{ rows }}" data-cols="{{ cols }}">
+    {% for r in range(rows) %}
+      <div class="row">
+        {% for c in range(cols) %}
+          {% set cls = 'cell' %}
+          {% if (r, c) == start %}
+            {% set cls = cls + ' start' %}
+          {% elif (r, c) == goal %}
+            {% set cls = cls + ' goal' %}
+          {% elif grid[r][c] == 1 %}
+            {% set cls = cls + ' obstacle' %}
+          {% else %}
+            {% set cls = cls + ' free' %}
+          {% endif %}
+          <div class="{{ cls }}" data-r="{{ r }}" data-c="{{ c }}"></div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <br><br>
+  <div class="controls">
+    <button id="computeBtn">Compute Route (UCS)</button>
+    <button id="nextBtn" disabled>Next Step</button>
+    <button id="regenBtn">New Grid</button>
+  </div>
+  <br><br>
+  <p id="info">Press <b>Compute Route</b> to run UCS and step through expansions.</p>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
